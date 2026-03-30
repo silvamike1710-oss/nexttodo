@@ -9,5 +9,5 @@ test("return correct count", () => {
       ])
     );
 
-    expect(result.current)taintObjectReference(2);
+    expect(result.current).toBe(2);
 });

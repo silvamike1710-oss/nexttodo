@@ -3,29 +3,27 @@
 import { useState } from "react";
 import { useContadorDeTarefas } from "@/hooks/useContadorDeTarefas";
 import NovaTarefa from "./NovaTarefa";
+import { addTarefa } from "@/lib/tarefas";
+import { Tarefa } from "@/types/tarefa";
 
-export default function ClientWrapper({ tarefas }: any) {
-  const [lista, setLista] = useState(tarefas);
+export default function ClientWrapper({ tarefas }: { tarefas: Tarefa[] }) {
+  const [lista, setLista] = useState<Tarefa[]>(tarefas);
 
   const count = useContadorDeTarefas(lista);
 
-  const handleAdd = (titulo: string) => {
-    const nova = {
-      id: Date.now(),
-      titulo,
-    };
-
-    setLista((prev: any) => [...prev, nova]);
+  const handleAdd = async (titulo: string) => {
+    const nova = await addTarefa(titulo);
+    setLista((prev) => [...prev, nova]);
   };
 
-  return (
+  return ( // ← THIS must exist
     <>
       <p>Total: {count}</p>
 
       <NovaTarefa onAdd={handleAdd} />
 
       <ul>
-        {lista.map((t: any) => (
+        {lista.map((t) => (
           <li key={t.id}>{t.titulo}</li>
         ))}
       </ul>
